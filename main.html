@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyHigh | Авиабилеты</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="bg-overlay"></div>
+
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo"><i class="fa-solid fa-plane"></i> SkyHigh</a>
+            <nav class="nav">
+                <a href="#" class="nav-link active">Авиабилеты</a>
+                <a href="hotels.html" class="nav-link">Отели</a>
+                <a href="orders.html" class="nav-link">Мои заказы</a>
+            </nav>
+            <button class="btn-login"><i class="fa-solid fa-user"></i> Войти</button>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+            <h1 class="hero-title">Найдите лучшие авиабилеты</h1>
+            <p class="hero-subtitle">Сравните цены от 750+ авиакомпаний</p>
+
+            <div class="search-card">
+                <div class="tabs">
+                    <button class="tab active" data-mode="round">Туда-обратно</button>
+                    <button class="tab" data-mode="oneway">В одну сторону</button>
+                </div>
+
+                <form id="searchForm" class="search-form">
+                    <div class="field-group locations">
+                        <div class="field" id="originField">
+                            <label>Откуда</label>
+                            <input type="text" id="origin" placeholder="Город" autocomplete="off" required>
+                            <span class="code" id="originCode"></span>
+                            <div class="dropdown" id="originDropdown"></div>
+                        </div>
+                        <button type="button" class="swap-btn" id="swapBtn"><i
+                                class="fa-solid fa-right-left"></i></button>
+                        <div class="field" id="destField">
+                            <label>Куда</label>
+                            <input type="text" id="destination" placeholder="Город" autocomplete="off" required>
+                            <span class="code" id="destCode"></span>
+                            <div class="dropdown" id="destDropdown"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field dates-field">
+                            <label>Даты</label>
+                            <input type="text" id="dates" placeholder="Выберите даты" readonly required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field passengers-field" id="passengersField">
+                            <label>Пассажиры</label>
+                            <div class="passengers-trigger" id="passengersTrigger">
+                                <span id="passengersText">1 пассажир</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="passengers-dropdown" id="passengersDropdown">
+                                <div class="pax-row">
+                                    <div><strong>Взрослые</strong><br><small>от 12 лет</small></div>
+                                    <div class="counter">
+                                        <button type="button" class="counter-btn" data-action="minus"
+                                            data-type="adults">−</button>
+                                        <span id="adultsCount">1</span>
+                                        <button type="button" class="counter-btn" data-action="plus"
+                                            data-type="adults">+</button>
+                                    </div>
+                                </div>
+                                <div class="pax-row">
+                                    <div><strong>Дети</strong><br><small>2-12 лет</small></div>
+                                    <div class="counter">
+                                        <button type="button" class="counter-btn" data-action="minus"
+                                            data-type="children">−</button>
+                                        <span id="childrenCount">0</span>
+                                        <button type="button" class="counter-btn" data-action="plus"
+                                            data-type="children">+</button>
+                                    </div>
+                                </div>
+                                <div class="pax-row">
+                                    <div><strong>Младенцы</strong><br><small>до 2 лет</small></div>
+                                    <div class="counter">
+                                        <button type="button" class="counter-btn" data-action="minus"
+                                            data-type="infants">−</button>
+                                        <span id="infantsCount">0</span>
+                                        <button type="button" class="counter-btn" data-action="plus"
+                                            data-type="infants">+</button>
+                                    </div>
+                                </div>
+                                <div class="pax-row class-row">
+                                    <div><strong>Класс</strong></div>
+                                    <select id="cabinClass">
+                                        <option value="economy">Эконом</option>
+                                        <option value="business">Бизнес</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="search-btn" id="searchBtn">
+                        <i class="fa-solid fa-magnifying-glass"></i> Найти билеты
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <section class="results hidden" id="results">
+        <div class="container">
+            <div class="results-header">
+                <h2>Найдено <span id="flightsCount">0</span> рейсов</h2>
+                <div class="filters">
+                    <button class="filter active" data-sort="best">Лучшие</button>
+                    <button class="filter" data-sort="cheap">Дешевые</button>
+                    <button class="filter" data-sort="fast">Быстрые</button>
+                </div>
+            </div>
+            <div id="flightsList" class="flights-list"></div>
+        </div>
+    </section>
+
+    <div class="modal hidden" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Оформление билета</h2>
+            <div id="flightSummary" class="flight-summary-modal"></div>
+            <form id="bookingForm">
+                <h3>Данные пассажира</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Фамилия</label><input type="text" id="lastName" required
+                            placeholder="IVANOV"></div>
+                    <div class="form-group"><label>Имя</label><input type="text" id="firstName" required
+                            placeholder="IVAN"></div>
+                    <div class="form-group"><label>Дата рождения</label><input type="date" id="birthDate" required>
+                    </div>
+                    <div class="form-group"><label>Паспорт</label><input type="text" id="passport" required
+                            placeholder="N12345678"></div>
+                    <div class="form-group full"><label>Email</label><input type="email" id="email" required
+                            placeholder="mail@example.com"></div>
+                </div>
+                <div class="price-total">Итого: <span id="modalPrice">$0</span></div>
+                <button type="submit" class="book-btn"><i class="fa-solid fa-lock"></i> Оплатить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="success-modal hidden" id="successModal">
+        <div class="success-content">
+            <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+            <h2>Билет оформлен!</h2>
+            <p>Электронный билет отправлен на вашу почту</p>
+            <p class="booking-ref">Бронирование: <strong id="bookingRef">ABC123</strong></p>
+            <button class="btn-home" onclick="location.reload()">На главную</button>
+        </div>
+    </div>
+
+    <div class="loader hidden" id="loader">
+        <div class="spinner"></div>
+        <p>Ищем лучшие предложения...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+
+</html>

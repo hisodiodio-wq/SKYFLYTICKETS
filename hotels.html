@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyHigh | Отели</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="hotels.css">
+</head>
+
+<body>
+    <div class="bg-overlay"></div>
+
+    <header class="header">
+        <div class="container">
+            <a href="main.html" class="logo"><i class="fa-solid fa-plane"></i> SkyHigh</a>
+            <nav class="nav">
+                <a href="main.html" class="nav-link">Авиабилеты</a>
+                <a href="hotels.html" class="nav-link active">Отели</a>
+                <a href="orders.html" class="nav-link">Мои заказы</a>
+            </nav>
+            <button class="btn-login"><i class="fa-solid fa-user"></i> Войти</button>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+            <h1 class="hero-title">Найдите идеальный отель</h1>
+            <p class="hero-subtitle">Более 500 000 отелей по всему миру</p>
+
+            <div class="search-card">
+                <form id="searchForm" class="search-form">
+                    <div class="field-group location-group">
+                        <div class="field" id="cityField">
+                            <label>Город или отель</label>
+                            <input type="text" id="cityInput" placeholder="Куда едем?" autocomplete="off" required>
+                            <span class="code" id="cityCode"></span>
+                            <div class="dropdown" id="cityDropdown"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-group dates-group">
+                        <div class="field">
+                            <label>Заезд — Выезд</label>
+                            <input type="text" id="datesInput" placeholder="Выберите даты" readonly required>
+                        </div>
+                    </div>
+
+                    <div class="field-group guests-group">
+                        <div class="field" id="guestsField">
+                            <label>Гости и номера</label>
+                            <div class="guests-trigger" id="guestsTrigger">
+                                <span id="guestsText">2 гостя, 1 номер</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="guests-dropdown" id="guestsDropdown">
+                                <div class="guest-row">
+                                    <div><strong>Взрослые</strong><br><small>от 18 лет</small></div>
+                                    <div class="counter">
+                                        <button type="button" class="counter-btn" data-action="minus"
+                                            data-type="adults">−</button>
+                                        <span id="adultsCount">2</span>
+                                        <button type="button" class="counter-btn" data-action="plus"
+                                            data-type="adults">+</button>
+                                    </div>
+                                </div>
+                                <div class="guest-row">
+                                    <div><strong>Дети</strong><br><small>до 18 лет</small></div>
+                                    <div class="counter">
+                                        <button type="button" class="counter-btn" data-action="minus"
+                                            data-type="children">−</button>
+                                        <span id="childrenCount">0</span>
+                                        <button type="button" class="counter-btn" data-action="plus"
+                                            data-type="children">+</button>
+                                    </div>
+                                </div>
+                                <div class="guest-row">
+                                    <div><strong>Номера</strong></div>
+                                    <div class="counter">
+                                        <button type="button" class="counter-btn" data-action="minus"
+                                            data-type="rooms">−</button>
+                                        <span id="roomsCount">1</span>
+                                        <button type="button" class="counter-btn" data-action="plus"
+                                            data-type="rooms">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="search-btn" id="searchBtn">
+                        <i class="fa-solid fa-magnifying-glass"></i> Найти отели
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <section class="results hidden" id="results">
+        <div class="container">
+            <div class="results-layout">
+                <aside class="filters-sidebar">
+                    <h3>Фильтры</h3>
+
+                    <div class="filter-section">
+                        <h4>Цена за ночь</h4>
+                        <div class="price-range">
+                            <input type="number" id="priceMin" placeholder="От" value="0">
+                            <span>—</span>
+                            <input type="number" id="priceMax" placeholder="До" value="1000">
+                        </div>
+                        <button class="apply-filter-btn" id="applyPrice">Применить</button>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4>Рейтинг</h4>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="rating-filter" value="5">
+                            <span>Превосходно: 9+</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="rating-filter" value="4">
+                            <span>Очень хорошо: 8+</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="rating-filter" value="3">
+                            <span>Хорошо: 7+</span>
+                        </label>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4>Тип размещения</h4>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="type-filter" value="hotel">
+                            <span>Отели</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="type-filter" value="apartment">
+                            <span>Апартаменты</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="type-filter" value="hostel">
+                            <span>Хостелы</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="type-filter" value="resort">
+                            <span>Курорты</span>
+                        </label>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4>Удобства</h4>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="amenity-filter" value="wifi">
+                            <span><i class="fa-solid fa-wifi"></i> Wi-Fi</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="amenity-filter" value="parking">
+                            <span><i class="fa-solid fa-square-parking"></i> Парковка</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="amenity-filter" value="pool">
+                            <span><i class="fa-solid fa-water-ladder"></i> Бассейн</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="amenity-filter" value="gym">
+                            <span><i class="fa-solid fa-dumbbell"></i> Спортзал</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="amenity-filter" value="restaurant">
+                            <span><i class="fa-solid fa-utensils"></i> Ресторан</span>
+                        </label>
+                    </div>
+
+                    <button class="reset-filters-btn" id="resetFilters">Сбросить фильтры</button>
+                </aside>
+
+                <div class="results-main">
+                    <div class="results-header">
+                        <h2>Найдено <span id="hotelsCount">0</span> отелей</h2>
+                        <div class="sort-controls">
+                            <label>Сортировка:</label>
+                            <select id="sortSelect">
+                                <option value="recommended">Рекомендуемые</option>
+                                <option value="price-asc">Цена: по возрастанию</option>
+                                <option value="price-desc">Цена: по убыванию</option>
+                                <option value="rating">Рейтинг</option>
+                                <option value="stars">Звезды</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="hotels-list" id="hotelsList"></div>
+
+                    <div class="pagination hidden" id="pagination">
+                        <button class="page-btn" id="prevPage" disabled>
+                            <i class="fa-solid fa-chevron-left"></i> Назад
+                        </button>
+                        <span class="page-info">Страница <span id="currentPage">1</span> из <span
+                                id="totalPages">1</span></span>
+                        <button class="page-btn" id="nextPage">
+                            Вперёд <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal hidden" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="modal-header">
+                <h2>Бронирование отеля</h2>
+            </div>
+
+            <div class="modal-body">
+                <div id="hotelSummary" class="hotel-summary"></div>
+
+                <form id="bookingForm" class="booking-form">
+                    <h3>Данные гостя</h3>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <input type="text" id="guestFirstName" required placeholder="Иван">
+                        </div>
+                        <div class="form-group">
+                            <label>Фамилия</label>
+                            <input type="text" id="guestLastName" required placeholder="Иванов">
+                        </div>
+                        <div class="form-group full">
+                            <label>Email</label>
+                            <input type="email" id="guestEmail" required placeholder="ivan@example.com">
+                        </div>
+                        <div class="form-group full">
+                            <label>Телефон</label>
+                            <input type="tel" id="guestPhone" required placeholder="+7 (___) ___-__-__">
+                        </div>
+                    </div>
+
+                    <h3>Особые пожелания</h3>
+                    <textarea id="specialRequests" rows="3"
+                        placeholder="Например: ранний заезд, высокий этаж"></textarea>
+
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span id="nightsInfo">3 ночи</span>
+                            <span id="nightsPrice">$300</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Налоги и сборы</span>
+                            <span id="taxPrice">$30</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Итого</span>
+                            <span id="totalPrice">$330</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="book-btn">
+                        <i class="fa-solid fa-check"></i> Забронировать
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-modal hidden" id="successModal">
+        <div class="success-content">
+            <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+            <h2>Бронирование подтверждено!</h2>
+            <p>Подтверждение отправлено на вашу почту</p>
+            <div class="booking-details">
+                <p><strong>Номер брони:</strong> <span id="bookingId">HTL-123456</span></p>
+                <p><strong>Email:</strong> <span id="confirmEmail">email@example.com</span></p>
+            </div>
+            <button class="btn-home" onclick="location.reload()">На главную</button>
+        </div>
+    </div>
+
+    <div class="loader hidden" id="loader">
+        <div class="spinner"></div>
+        <p>Ищем лучшие отели...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+    <script src="hotels.js"></script>
+    <script src="auth.js"></script>
+</body>
+
+</html>
